@@ -25,7 +25,7 @@ class _ConfirmPageWidgetState extends State<ConfirmPageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 2000));
 
       context.pushNamed('ScanPage');
     });

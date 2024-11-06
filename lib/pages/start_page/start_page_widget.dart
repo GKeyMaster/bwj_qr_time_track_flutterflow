@@ -230,13 +230,19 @@ class _StartPageWidgetState extends State<StartPageWidget> {
                             20.0, 20.0, 20.0, 0.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            FFAppState().tool = _model.toolValue!;
-                            _model.apiResultagv = await StartCall.call();
+                            if (_model.toolValue != null &&
+                                _model.toolValue != '') {
+                              FFAppState().tool = _model.toolValue!;
+                              await Future.wait([
+                                Future(() async {
+                                  _model.apiResultagv = await StartCall.call();
+                                }),
+                                Future(() async {
+                                  FFAppState().startTime = getCurrentTimestamp;
 
-                            if ((_model.apiResultagv?.succeeded ?? true)) {
-                              FFAppState().startTime = getCurrentTimestamp;
-
-                              context.pushNamed('StopPage');
+                                  context.pushNamed('StopPage');
+                                }),
+                              ]);
                             }
 
                             safeSetState(() {});

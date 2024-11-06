@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -251,8 +252,17 @@ class _CheckPageWidgetState extends State<CheckPageWidget> {
                   padding:
                       const EdgeInsetsDirectional.fromSTEB(20.0, 60.0, 20.0, 10.0),
                   child: FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
+                    onPressed: () async {
+                      await Future.wait([
+                        Future(() async {
+                          context.pushNamed('ConfirmPage');
+                        }),
+                        Future(() async {
+                          _model.apiResulteyp = await CheckCall.call();
+                        }),
+                      ]);
+
+                      safeSetState(() {});
                     },
                     text: 'CHECK',
                     options: FFButtonOptions(

@@ -310,49 +310,47 @@ class _ScanPageWidgetState extends State<ScanPageWidget> {
                 padding: const EdgeInsetsDirectional.fromSTEB(20.0, 70.0, 20.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    FFAppState().jobNumber =
-                        _model.jobNumberTextController.text;
-                    safeSetState(() {});
-                    _model.scanResult1 = await ScanCall.call(
-                      jobNumber: FFAppState().jobNumber,
-                      token: FFAppState().token,
-                    );
+                    if (_model.jobNumberTextController.text != '') {
+                      FFAppState().jobNumber =
+                          _model.jobNumberTextController.text;
+                      safeSetState(() {});
+                      _model.scanResult1 = await ScanCall.call(
+                        jobNumber: FFAppState().jobNumber,
+                        token: FFAppState().token,
+                      );
 
-                    if ((_model.scanResult1?.succeeded ?? true)) {
-                      if (FFAppState().role == 'Worker') {
-                        context.pushNamed('StartPage');
-                      } else {
-                        if (FFAppState().role == 'Factory Manager') {
-                          if (ScanCall.status(
-                                (_model.scanResult?.jsonBody ?? ''),
-                              ) ==
-                              '\"NEW\"') {
-                            FFAppState().error =
-                                'Oops! The job ${FFAppState().jobNumber} is not started yet.';
-                            safeSetState(() {});
+                      if ((_model.scanResult1?.succeeded ?? true)) {
+                        if (FFAppState().role == 'Worker') {
+                          FFAppState().tools = ScanCall.tools(
+                            (_model.scanResult1?.jsonBody ?? ''),
+                          )!
+                              .toList()
+                              .cast<String>();
+                          safeSetState(() {});
 
-                            context.pushNamed('ErrorPage');
-                          } else {
-                            context.pushNamed('CheckPage');
-                          }
+                          context.pushNamed('StartPage');
                         } else {
-                          if (FFAppState().role == 'Store Manager') {
+                          if (FFAppState().role == 'Factory Manager') {
                             if (ScanCall.status(
                                   (_model.scanResult?.jsonBody ?? ''),
                                 ) ==
-                                'NEW') {
+                                '\"NEW\"') {
                               FFAppState().error =
                                   'Oops! The job ${FFAppState().jobNumber} is not started yet.';
                               safeSetState(() {});
 
                               context.pushNamed('ErrorPage');
                             } else {
+                              context.pushNamed('CheckPage');
+                            }
+                          } else {
+                            if (FFAppState().role == 'Store Manager') {
                               if (ScanCall.status(
                                     (_model.scanResult?.jsonBody ?? ''),
                                   ) ==
-                                  'ON') {
+                                  'NEW') {
                                 FFAppState().error =
-                                    'Oops! The job ${FFAppState().jobNumber} is not completed yet.';
+                                    'Oops! The job ${FFAppState().jobNumber} is not started yet.';
                                 safeSetState(() {});
 
                                 context.pushNamed('ErrorPage');
@@ -360,14 +358,25 @@ class _ScanPageWidgetState extends State<ScanPageWidget> {
                                 if (ScanCall.status(
                                       (_model.scanResult?.jsonBody ?? ''),
                                     ) ==
-                                    'COMPLETED') {
+                                    'ON') {
                                   FFAppState().error =
-                                      'Oops! The job ${FFAppState().jobNumber} is not approved by the Factory Manager yet.';
+                                      'Oops! The job ${FFAppState().jobNumber} is not completed yet.';
                                   safeSetState(() {});
 
                                   context.pushNamed('ErrorPage');
                                 } else {
-                                  context.pushNamed('DeliverPage');
+                                  if (ScanCall.status(
+                                        (_model.scanResult?.jsonBody ?? ''),
+                                      ) ==
+                                      'COMPLETED') {
+                                    FFAppState().error =
+                                        'Oops! The job ${FFAppState().jobNumber} is not approved by the Factory Manager yet.';
+                                    safeSetState(() {});
+
+                                    context.pushNamed('ErrorPage');
+                                  } else {
+                                    context.pushNamed('DeliverPage');
+                                  }
                                 }
                               }
                             }

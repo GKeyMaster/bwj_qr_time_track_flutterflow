@@ -16,8 +16,6 @@ class IndexPageModel extends FlutterFlowModel<IndexPageWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Backend Call - API (authCheck)] action in IndexPage widget.
-  ApiCallResponse? authCheckResult;
   // State field(s) for UserId widget.
   FocusNode? userIdFocusNode;
   TextEditingController? userIdTextController;

@@ -7,3 +7,4 @@ export '/pages/confirm_page/confirm_page_widget.dart' show ConfirmPageWidget;
 export '/pages/deliver_page/deliver_page_widget.dart' show DeliverPageWidget;
 export '/pages/error_page/error_page_widget.dart' show ErrorPageWidget;
 export '/pages/check_page/check_page_widget.dart' show CheckPageWidget;
+export '/pages/home_page/home_page_widget.dart' show HomePageWidget;

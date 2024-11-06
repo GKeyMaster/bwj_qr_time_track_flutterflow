@@ -4,8 +4,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
 import 'index_page_model.dart';
 export 'index_page_model.dart';
 
@@ -26,40 +24,6 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
     super.initState();
     _model = createModel(context, () => IndexPageModel());
 
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (FFAppState().token != '') {
-        _model.authCheckResult = await AuthCheckCall.call(
-          token: FFAppState().token,
-        );
-
-        if (AuthCheckCall.status(
-              (_model.authCheckResult?.jsonBody ?? ''),
-            ) ==
-            'success') {
-          if ((AuthCheckCall.role(
-                    (_model.authCheckResult?.jsonBody ?? ''),
-                  ) ==
-                  'Worker') &&
-              (AuthCheckCall.message(
-                    (_model.authCheckResult?.jsonBody ?? ''),
-                  ) ==
-                  'JobStarted')) {
-            FFAppState().jobNumber = AuthCheckCall.jobNumber(
-              (_model.authCheckResult?.jsonBody ?? ''),
-            )!;
-            FFAppState().tool = AuthCheckCall.tool(
-              (_model.authCheckResult?.jsonBody ?? ''),
-            )!;
-
-            context.pushNamed('StopPage');
-          } else {
-            context.pushNamed('ScanPage');
-          }
-        }
-      }
-    });
-
     _model.userIdTextController ??= TextEditingController();
     _model.userIdFocusNode ??= FocusNode();
 
@@ -76,8 +40,6 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(

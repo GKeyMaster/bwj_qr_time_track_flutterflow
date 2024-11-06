@@ -293,11 +293,14 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                 padding: const EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    _model.apiResultqn2 = await StopCall.call();
-
-                    if ((_model.apiResultqn2?.succeeded ?? true)) {
-                      context.pushNamed('ConfirmPage');
-                    }
+                    await Future.wait([
+                      Future(() async {
+                        context.pushNamed('ConfirmPage');
+                      }),
+                      Future(() async {
+                        _model.apiResultqn2 = await StopCall.call();
+                      }),
+                    ]);
 
                     safeSetState(() {});
                   },

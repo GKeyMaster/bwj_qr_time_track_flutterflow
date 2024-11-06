@@ -253,11 +253,14 @@ class _DeliverPageWidgetState extends State<DeliverPageWidget> {
                       const EdgeInsetsDirectional.fromSTEB(20.0, 60.0, 20.0, 10.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      _model.apiResulteyp = await DeliverCall.call();
-
-                      if ((_model.apiResulteyp?.succeeded ?? true)) {
-                        context.pushNamed('ConfirmPage');
-                      }
+                      await Future.wait([
+                        Future(() async {
+                          context.pushNamed('ConfirmPage');
+                        }),
+                        Future(() async {
+                          _model.apiResulteyp = await DeliverCall.call();
+                        }),
+                      ]);
 
                       safeSetState(() {});
                     },
