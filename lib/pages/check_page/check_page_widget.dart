@@ -258,7 +258,10 @@ class _CheckPageWidgetState extends State<CheckPageWidget> {
                           context.pushNamed('ConfirmPage');
                         }),
                         Future(() async {
-                          _model.apiResulteyp = await CheckCall.call();
+                          _model.apiResulteyp = await CheckCall.call(
+                            token: FFAppState().token,
+                            jobNumber: FFAppState().jobNumber,
+                          );
                         }),
                       ]);
 

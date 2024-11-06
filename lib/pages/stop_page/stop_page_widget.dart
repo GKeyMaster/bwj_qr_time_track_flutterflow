@@ -298,7 +298,9 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                         context.pushNamed('ConfirmPage');
                       }),
                       Future(() async {
-                        _model.apiResultqn2 = await StopCall.call();
+                        _model.apiResultqn2 = await StopCall.call(
+                          token: FFAppState().token,
+                        );
                       }),
                     ]);
 

@@ -258,7 +258,10 @@ class _DeliverPageWidgetState extends State<DeliverPageWidget> {
                           context.pushNamed('ConfirmPage');
                         }),
                         Future(() async {
-                          _model.apiResulteyp = await DeliverCall.call();
+                          _model.apiResulteyp = await DeliverCall.call(
+                            token: FFAppState().token,
+                            jobNumber: FFAppState().jobNumber,
+                          );
                         }),
                       ]);
 

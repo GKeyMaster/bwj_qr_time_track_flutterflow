@@ -235,7 +235,11 @@ class _StartPageWidgetState extends State<StartPageWidget> {
                               FFAppState().tool = _model.toolValue!;
                               await Future.wait([
                                 Future(() async {
-                                  _model.apiResultagv = await StartCall.call();
+                                  _model.apiResultagv = await StartCall.call(
+                                    token: FFAppState().token,
+                                    jobNumber: FFAppState().jobNumber,
+                                    tool: FFAppState().tool,
+                                  );
                                 }),
                                 Future(() async {
                                   FFAppState().startTime = getCurrentTimestamp;
