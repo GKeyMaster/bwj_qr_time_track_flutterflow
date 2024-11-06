@@ -311,6 +311,9 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                   onPressed: () async {
                     if ((_model.id != null && _model.id != '') &&
                         (_model.password != null && _model.password != '')) {
+                      _model.isLoginFailed = false;
+                      _model.errorMsg = ' ';
+                      safeSetState(() {});
                       _model.loginCallback = await LoginCall.call(
                         id: _model.userIdTextController.text,
                         password: _model.passwordTextController.text,
