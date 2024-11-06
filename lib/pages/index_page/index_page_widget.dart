@@ -309,14 +309,16 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                 padding: const EdgeInsetsDirectional.fromSTEB(20.0, 50.0, 20.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    if ((_model.id != null && _model.id != '') &&
-                        (_model.password != null && _model.password != '')) {
+                    if ((_model.userIdTextController.text != '') &&
+                        (_model.passwordTextController.text != '')) {
                       _model.isLoginFailed = false;
                       _model.errorMsg = ' ';
+                      _model.id = _model.userIdTextController.text;
+                      _model.password = _model.passwordTextController.text;
                       safeSetState(() {});
                       _model.loginCallback = await LoginCall.call(
-                        id: _model.userIdTextController.text,
-                        password: _model.passwordTextController.text,
+                        id: _model.id,
+                        password: _model.password,
                       );
 
                       if (LoginCall.status(
