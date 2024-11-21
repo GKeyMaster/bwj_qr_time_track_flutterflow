@@ -56,36 +56,33 @@ class _ScanPageWidgetState extends State<ScanPageWidget> {
             flexibleSpace: FlexibleSpaceBar(
               title: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Spacer(),
                   Expanded(
+                    flex: 2,
                     child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(50.0, 60.0, 50.0, 0.0),
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(0.0),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                    child: Text(
-                      FFAppState().username,
-                      textAlign: TextAlign.center,
-                      style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
-                                fontFamily: 'Inter Tight',
-                                color: const Color(0xFF222222),
-                                fontSize: 24.0,
-                                letterSpacing: 0.0,
-                              ),
-                    ),
+                  Text(
+                    FFAppState().username,
+                    textAlign: TextAlign.center,
+                    style: FlutterFlowTheme.of(context).headlineMedium.override(
+                          fontFamily: 'Inter Tight',
+                          color: const Color(0xFF222222),
+                          fontSize: 24.0,
+                          letterSpacing: 0.0,
+                        ),
                   ),
                 ],
               ),
@@ -102,6 +99,7 @@ class _ScanPageWidgetState extends State<ScanPageWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Spacer(flex: 3),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -405,9 +403,8 @@ class _ScanPageWidgetState extends State<ScanPageWidget> {
                   ),
                 ),
               ),
-            ]
-                .addToStart(const SizedBox(height: 30.0))
-                .addToEnd(const SizedBox(height: 150.0)),
+              const Spacer(flex: 5),
+            ],
           ),
         ),
       ),

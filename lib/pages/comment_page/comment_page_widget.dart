@@ -56,36 +56,33 @@ class _CommentPageWidgetState extends State<CommentPageWidget> {
             flexibleSpace: FlexibleSpaceBar(
               title: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Spacer(),
                   Expanded(
+                    flex: 2,
                     child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(50.0, 60.0, 50.0, 0.0),
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(0.0),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                    child: Text(
-                      FFAppState().username,
-                      textAlign: TextAlign.center,
-                      style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
-                                fontFamily: 'Inter Tight',
-                                color: const Color(0xFF222222),
-                                fontSize: 24.0,
-                                letterSpacing: 0.0,
-                              ),
-                    ),
+                  Text(
+                    FFAppState().username,
+                    textAlign: TextAlign.center,
+                    style: FlutterFlowTheme.of(context).headlineMedium.override(
+                          fontFamily: 'Inter Tight',
+                          color: const Color(0xFF222222),
+                          fontSize: 24.0,
+                          letterSpacing: 0.0,
+                        ),
                   ),
                 ],
               ),
@@ -102,6 +99,79 @@ class _CommentPageWidgetState extends State<CommentPageWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Spacer(flex: 2),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 15.0),
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    final selectedMedia = await selectMedia(
+                      multiImage: false,
+                    );
+                    if (selectedMedia != null &&
+                        selectedMedia.every((m) =>
+                            validateFileFormat(m.storagePath, context))) {
+                      safeSetState(() => _model.isDataUploading = true);
+                      var selectedUploadedFiles = <FFUploadedFile>[];
+
+                      try {
+                        showUploadMessage(
+                          context,
+                          'Uploading file...',
+                          showLoading: true,
+                        );
+                        selectedUploadedFiles = selectedMedia
+                            .map((m) => FFUploadedFile(
+                                  name: m.storagePath.split('/').last,
+                                  bytes: m.bytes,
+                                  height: m.dimensions?.height,
+                                  width: m.dimensions?.width,
+                                  blurHash: m.blurHash,
+                                ))
+                            .toList();
+                      } finally {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        _model.isDataUploading = false;
+                      }
+                      if (selectedUploadedFiles.length ==
+                          selectedMedia.length) {
+                        safeSetState(() {
+                          _model.uploadedLocalFile =
+                              selectedUploadedFiles.first;
+                        });
+                        showUploadMessage(context, 'Success!');
+                      } else {
+                        safeSetState(() {});
+                        showUploadMessage(context, 'Failed to upload data');
+                        return;
+                      }
+                    }
+
+                    await actions.uploadPhoto(
+                      _model.uploadedLocalFile,
+                      '${FFAppState().jobNumber}-${FFAppState().tool}-${FFAppState().username}-${dateTimeFormat("yMd", getCurrentTimestamp)}',
+                      FFAppState().token,
+                      FFAppState().jobNumber,
+                    );
+                  },
+                  text: 'TAKE A PHOTO',
+                  options: FFButtonOptions(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 25.0, 16.0, 25.0),
+                    iconPadding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: const Color(0xA658F043),
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Inter Tight',
+                          color: Colors.white,
+                          fontSize: 24.0,
+                          letterSpacing: 0.0,
+                        ),
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(8.0),
+                    hoverColor: const Color(0x6C58F043),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
                 child: SizedBox(
@@ -176,7 +246,7 @@ class _CommentPageWidgetState extends State<CommentPageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 0.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 15.0, 20.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: (_model.commentTextController.text == '')
                       ? null
@@ -216,78 +286,6 @@ class _CommentPageWidgetState extends State<CommentPageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 15.0, 20.0, 15.0),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    final selectedMedia = await selectMedia(
-                      multiImage: false,
-                    );
-                    if (selectedMedia != null &&
-                        selectedMedia.every((m) =>
-                            validateFileFormat(m.storagePath, context))) {
-                      safeSetState(() => _model.isDataUploading = true);
-                      var selectedUploadedFiles = <FFUploadedFile>[];
-
-                      try {
-                        showUploadMessage(
-                          context,
-                          'Uploading file...',
-                          showLoading: true,
-                        );
-                        selectedUploadedFiles = selectedMedia
-                            .map((m) => FFUploadedFile(
-                                  name: m.storagePath.split('/').last,
-                                  bytes: m.bytes,
-                                  height: m.dimensions?.height,
-                                  width: m.dimensions?.width,
-                                  blurHash: m.blurHash,
-                                ))
-                            .toList();
-                      } finally {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        _model.isDataUploading = false;
-                      }
-                      if (selectedUploadedFiles.length ==
-                          selectedMedia.length) {
-                        safeSetState(() {
-                          _model.uploadedLocalFile =
-                              selectedUploadedFiles.first;
-                        });
-                        showUploadMessage(context, 'Success!');
-                      } else {
-                        safeSetState(() {});
-                        showUploadMessage(context, 'Failed to upload data');
-                        return;
-                      }
-                    }
-
-                    await actions.uploadPhoto(
-                      _model.uploadedLocalFile,
-                      '${FFAppState().jobNumber}-${FFAppState().tool}-${FFAppState().username}-${dateTimeFormat("yMd", getCurrentTimestamp)}',
-                      FFAppState().token,
-                      FFAppState().jobNumber,
-                    );
-                  },
-                  text: 'TAKE A PHOTO',
-                  options: FFButtonOptions(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 25.0, 16.0, 25.0),
-                    iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: const Color(0xA658F043),
-                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                          fontFamily: 'Inter Tight',
-                          color: Colors.white,
-                          fontSize: 24.0,
-                          letterSpacing: 0.0,
-                        ),
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(8.0),
-                    hoverColor: const Color(0x6C58F043),
-                  ),
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(20.0, 15.0, 20.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
@@ -312,9 +310,8 @@ class _CommentPageWidgetState extends State<CommentPageWidget> {
                   ),
                 ),
               ),
-            ]
-                .addToStart(const SizedBox(height: 40.0))
-                .addToEnd(const SizedBox(height: 200.0)),
+              const Spacer(flex: 3),
+            ],
           ),
         ),
       ),

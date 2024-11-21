@@ -83,6 +83,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Spacer(flex: 2),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
@@ -100,9 +101,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ),
                 ),
               ),
-            ]
-                .addToStart(const SizedBox(height: 50.0))
-                .addToEnd(const SizedBox(height: 150.0)),
+              const Spacer(flex: 3),
+            ],
           ),
         ),
       ),

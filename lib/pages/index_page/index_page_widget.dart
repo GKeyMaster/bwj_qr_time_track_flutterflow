@@ -53,6 +53,7 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Spacer(flex: 2),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -400,9 +401,8 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                   ),
                 ),
               ),
-            ]
-                .addToStart(const SizedBox(height: 50.0))
-                .addToEnd(const SizedBox(height: 200.0)),
+              const Spacer(flex: 4),
+            ],
           ),
         ),
       ),

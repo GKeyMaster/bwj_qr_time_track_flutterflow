@@ -10,15 +10,16 @@ class CommentPageModel extends FlutterFlowModel<CommentPageWidget> {
 
   ///  State fields for stateful widgets in this page.
 
+  bool isDataUploading = false;
+  FFUploadedFile uploadedLocalFile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+
   // State field(s) for comment widget.
   FocusNode? commentFocusNode;
   TextEditingController? commentTextController;
   String? Function(BuildContext, String?)? commentTextControllerValidator;
   // Stores action output result for [Backend Call - API (comment)] action in SUBMIT widget.
   ApiCallResponse? apiResulttqi;
-  bool isDataUploading = false;
-  FFUploadedFile uploadedLocalFile =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
 
   @override
   void initState(BuildContext context) {}
