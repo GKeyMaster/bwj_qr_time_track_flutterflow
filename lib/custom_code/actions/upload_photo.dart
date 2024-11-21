@@ -37,6 +37,8 @@ Future uploadPhoto(
 
   request.fields.addAll({'job-number': jobNumber});
 
+  request.fields.addAll({'image-name': imageName});
+
   var response = await request.send();
 
   if (response.statusCode == 200) {
