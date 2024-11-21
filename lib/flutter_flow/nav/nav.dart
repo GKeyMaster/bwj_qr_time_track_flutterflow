@@ -80,6 +80,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'HomePage',
           path: '/homePage',
           builder: (context, params) => const HomePageWidget(),
+        ),
+        FFRoute(
+          name: 'CommentPage',
+          path: '/comment',
+          builder: (context, params) => const CommentPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

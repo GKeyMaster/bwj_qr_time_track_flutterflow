@@ -50,44 +50,35 @@ class _ErrorPageWidgetState extends State<ErrorPageWidget> {
             flexibleSpace: FlexibleSpaceBar(
               title: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
                     child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(50.0, 20.0, 50.0, 0.0),
+                          const EdgeInsetsDirectional.fromSTEB(50.0, 60.0, 50.0, 0.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          width: 200.0,
-                          height: 200.0,
                           fit: BoxFit.scaleDown,
-                          alignment: const Alignment(0.0, 0.0),
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: const AlignmentDirectional(0.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                        child: Text(
-                          'Hello, ${FFAppState().username}!',
-                          textAlign: TextAlign.center,
-                          style: FlutterFlowTheme.of(context)
-                              .headlineMedium
-                              .override(
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                    child: Text(
+                      FFAppState().username,
+                      textAlign: TextAlign.center,
+                      style:
+                          FlutterFlowTheme.of(context).headlineMedium.override(
                                 fontFamily: 'Inter Tight',
                                 color: const Color(0xFF222222),
-                                fontSize: 22.0,
+                                fontSize: 24.0,
                                 letterSpacing: 0.0,
                               ),
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -128,13 +119,14 @@ class _ErrorPageWidgetState extends State<ErrorPageWidget> {
                   text: 'RESCAN',
                   options: FFButtonOptions(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 17.0, 16.0, 17.0),
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 20.0, 16.0, 20.0),
                     iconPadding:
                         const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: const Color(0xA658F043),
                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                           fontFamily: 'Inter Tight',
                           color: Colors.white,
+                          fontSize: 24.0,
                           letterSpacing: 0.0,
                         ),
                     elevation: 5.0,
@@ -143,7 +135,9 @@ class _ErrorPageWidgetState extends State<ErrorPageWidget> {
                   ),
                 ),
               ),
-            ].addToEnd(const SizedBox(height: 150.0)),
+            ]
+                .addToStart(const SizedBox(height: 50.0))
+                .addToEnd(const SizedBox(height: 200.0)),
           ),
         ),
       ),

@@ -100,7 +100,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ),
                 ),
               ),
-            ],
+            ]
+                .addToStart(const SizedBox(height: 50.0))
+                .addToEnd(const SizedBox(height: 150.0)),
           ),
         ),
       ),

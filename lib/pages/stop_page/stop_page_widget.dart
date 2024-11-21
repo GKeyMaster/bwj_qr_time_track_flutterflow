@@ -30,17 +30,35 @@ class _StopPageWidgetState extends State<StopPageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.timerController.timer.setPresetTime(
-        mSec: functions.getTimespan(FFAppState().startTime!),
-        add: false,
-      );
-      _model.timerController.onResetTimer();
+      if (FFAppState().timespan != 0) {
+        if (FFAppState().isTimerPaused == true) {
+          _model.timerController.timer.setPresetTime(
+            mSec: FFAppState().timespan,
+            add: false,
+          );
+          _model.timerController.onResetTimer();
+        } else {
+          _model.timerController.timer.setPresetTime(
+            mSec: functions.getTimespan(
+                FFAppState().stopTime!, FFAppState().timespan),
+            add: false,
+          );
+          _model.timerController.onResetTimer();
 
-      _model.timerController.onStartTimer();
+          _model.timerController.onStartTimer();
+        }
+      } else {
+        _model.timerController.onStartTimer();
+        FFAppState().timespan = 1;
+        safeSetState(() {});
+      }
     });
 
-    _model.textController1 ??=
-        TextEditingController(text: FFAppState().jobNumber);
+    _model.textController1 ??= TextEditingController(
+        text: valueOrDefault<String>(
+      FFAppState().jobNumber,
+      'DC122001',
+    ));
     _model.textFieldFocusNode1 ??= FocusNode();
 
     _model.textController2 ??= TextEditingController(text: FFAppState().tool);
@@ -75,44 +93,35 @@ class _StopPageWidgetState extends State<StopPageWidget> {
             flexibleSpace: FlexibleSpaceBar(
               title: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
                     child: Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(50.0, 20.0, 50.0, 0.0),
+                          const EdgeInsetsDirectional.fromSTEB(50.0, 60.0, 50.0, 0.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          width: 200.0,
-                          height: 200.0,
                           fit: BoxFit.scaleDown,
-                          alignment: const Alignment(0.0, 0.0),
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: const AlignmentDirectional(0.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                        child: Text(
-                          'Hello, ${FFAppState().username}!',
-                          textAlign: TextAlign.center,
-                          style: FlutterFlowTheme.of(context)
-                              .headlineMedium
-                              .override(
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                    child: Text(
+                      FFAppState().username,
+                      textAlign: TextAlign.center,
+                      style:
+                          FlutterFlowTheme.of(context).headlineMedium.override(
                                 fontFamily: 'Inter Tight',
                                 color: const Color(0xFF222222),
-                                fontSize: 22.0,
+                                fontSize: 24.0,
                                 letterSpacing: 0.0,
                               ),
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -131,7 +140,7 @@ class _StopPageWidgetState extends State<StopPageWidget> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 5.0, 20.0, 5.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 10.0),
                 child: SizedBox(
                   width: 200.0,
                   child: TextFormField(
@@ -145,12 +154,14 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                       labelStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 fontFamily: 'Inter',
+                                fontSize: 24.0,
                                 letterSpacing: 0.0,
                               ),
                       hintText: 'JOB NUMBER',
                       hintStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 fontFamily: 'Inter',
+                                fontSize: 24.0,
                                 letterSpacing: 0.0,
                               ),
                       enabledBorder: OutlineInputBorder(
@@ -187,6 +198,7 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                     ),
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
+                          fontSize: 24.0,
                           letterSpacing: 0.0,
                         ),
                     textAlign: TextAlign.center,
@@ -197,7 +209,7 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 5.0, 20.0, 5.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 10.0),
                 child: SizedBox(
                   width: 200.0,
                   child: TextFormField(
@@ -211,13 +223,16 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                       labelStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 fontFamily: 'Inter',
+                                color: const Color(0xFFDED7D7),
+                                fontSize: 24.0,
                                 letterSpacing: 0.0,
                               ),
                       hintText: 'TOOL',
                       hintStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 fontFamily: 'Inter',
-                                color: const Color(0xFFDBDBDB),
+                                color: const Color(0xFFDED7D7),
+                                fontSize: 24.0,
                                 letterSpacing: 0.0,
                               ),
                       enabledBorder: OutlineInputBorder(
@@ -254,6 +269,7 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
                           color: const Color(0xFFDED7D7),
+                          fontSize: 24.0,
                           letterSpacing: 0.0,
                         ),
                     textAlign: TextAlign.center,
@@ -263,43 +279,101 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                child: FlutterFlowTimer(
-                  initialTime: _model.timerInitialTimeMs,
-                  getDisplayTime: (value) => StopWatchTimer.getDisplayTime(
-                    value,
-                    hours: false,
-                    milliSecond: false,
-                  ),
-                  controller: _model.timerController,
-                  updateStateInterval: const Duration(milliseconds: 1000),
-                  onChanged: (value, displayTime, shouldUpdate) {
-                    _model.timerMilliseconds = value;
-                    _model.timerValue = displayTime;
-                    if (shouldUpdate) safeSetState(() {});
-                  },
-                  textAlign: TextAlign.center,
-                  style: FlutterFlowTheme.of(context).headlineSmall.override(
-                        fontFamily: 'Oswald',
-                        color: const Color(0xFF3E3E3E),
-                        fontSize: 94.0,
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w300,
-                      ),
+              FlutterFlowTimer(
+                initialTime: _model.timerInitialTimeMs,
+                getDisplayTime: (value) => StopWatchTimer.getDisplayTime(
+                  value,
+                  hours: false,
+                  milliSecond: false,
                 ),
+                controller: _model.timerController,
+                updateStateInterval: const Duration(milliseconds: 1000),
+                onChanged: (value, displayTime, shouldUpdate) {
+                  _model.timerMilliseconds = value;
+                  _model.timerValue = displayTime;
+                  if (shouldUpdate) safeSetState(() {});
+                },
+                textAlign: TextAlign.center,
+                style: FlutterFlowTheme.of(context).headlineSmall.override(
+                      fontFamily: 'Oswald',
+                      color: const Color(0xFF3E3E3E),
+                      fontSize: 112.0,
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w300,
+                    ),
               ),
+              if (FFAppState().isTimerPaused == false)
+                Padding(
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(20.0, 15.0, 20.0, 15.0),
+                  child: FFButtonWidget(
+                    onPressed: () async {
+                      _model.timerController.onStopTimer();
+                      FFAppState().timespan = _model.timerMilliseconds;
+                      FFAppState().isTimerPaused = true;
+                    },
+                    text: 'PAUSE',
+                    options: FFButtonOptions(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          16.0, 20.0, 16.0, 20.0),
+                      iconPadding:
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: const Color(0xA67E7E7E),
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                fontFamily: 'Inter Tight',
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                letterSpacing: 0.0,
+                              ),
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(8.0),
+                      hoverColor: const Color(0xA65A5A5A),
+                    ),
+                  ),
+                ),
+              if (FFAppState().isTimerPaused == true)
+                Padding(
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(20.0, 15.0, 20.0, 15.0),
+                  child: FFButtonWidget(
+                    onPressed: () async {
+                      _model.timerController.onStartTimer();
+                      FFAppState().isTimerPaused = false;
+                      FFAppState().stopTime = getCurrentTimestamp;
+                    },
+                    text: 'RESUME',
+                    options: FFButtonOptions(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          16.0, 20.0, 16.0, 20.0),
+                      iconPadding:
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: const Color(0xA658F043),
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                fontFamily: 'Inter Tight',
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                letterSpacing: 0.0,
+                              ),
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(8.0),
+                      hoverColor: const Color(0x6C58F043),
+                    ),
+                  ),
+                ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 0.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 15.0, 20.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     await Future.wait([
                       Future(() async {
-                        context.pushNamed('ConfirmPage');
+                        context.pushNamed('CommentPage');
                       }),
                       Future(() async {
                         _model.apiResultqn2 = await StopCall.call(
                           token: FFAppState().token,
+                          timespan: functions.getMins(_model.timerMilliseconds),
                         );
                       }),
                     ]);
@@ -309,13 +383,14 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                   text: 'STOP',
                   options: FFButtonOptions(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 25.0, 16.0, 25.0),
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 30.0, 16.0, 30.0),
                     iconPadding:
                         const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: const Color(0xFFF06E43),
                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                           fontFamily: 'Inter Tight',
                           color: Colors.white,
+                          fontSize: 24.0,
                           letterSpacing: 0.0,
                         ),
                     elevation: 5.0,
@@ -324,7 +399,9 @@ class _StopPageWidgetState extends State<StopPageWidget> {
                   ),
                 ),
               ),
-            ].addToEnd(const SizedBox(height: 180.0)),
+            ]
+                .addToStart(const SizedBox(height: 10.0))
+                .addToEnd(const SizedBox(height: 100.0)),
           ),
         ),
       ),

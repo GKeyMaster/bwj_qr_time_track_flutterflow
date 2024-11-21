@@ -12,6 +12,7 @@ class StartPageModel extends FlutterFlowModel<StartPageWidget> {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
   // State field(s) for tool widget.
+  String? toolValue;
   FormFieldController<String>? toolValueController;
   // Stores action output result for [Backend Call - API (start)] action in Button widget.
   ApiCallResponse? apiResultagv;
@@ -24,7 +25,4 @@ class StartPageModel extends FlutterFlowModel<StartPageWidget> {
     textFieldFocusNode?.dispose();
     textController?.dispose();
   }
-
-  /// Additional helper methods.
-  String? get toolValue => toolValueController?.value;
 }

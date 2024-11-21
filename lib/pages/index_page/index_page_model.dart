@@ -27,6 +27,9 @@ class IndexPageModel extends FlutterFlowModel<IndexPageWidget> {
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
   // Stores action output result for [Backend Call - API (login)] action in Button widget.
   ApiCallResponse? loginCallback;
+  bool isDataUploading = false;
+  FFUploadedFile uploadedLocalFile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
 
   @override
   void initState(BuildContext context) {

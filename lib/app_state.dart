@@ -42,6 +42,19 @@ class FFAppState extends ChangeNotifier {
               (await secureStorage.getInt('ff_startTime'))!)
           : _startTime;
     });
+    await _safeInitAsync(() async {
+      _isTimerPaused =
+          await secureStorage.getBool('ff_isTimerPaused') ?? _isTimerPaused;
+    });
+    await _safeInitAsync(() async {
+      _timespan = await secureStorage.getInt('ff_timespan') ?? _timespan;
+    });
+    await _safeInitAsync(() async {
+      _stopTime = await secureStorage.read(key: 'ff_stopTime') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              (await secureStorage.getInt('ff_stopTime'))!)
+          : _stopTime;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -151,7 +164,7 @@ class FFAppState extends ChangeNotifier {
     secureStorage.setStringList('ff_tools', _tools);
   }
 
-  DateTime? _startTime = DateTime.fromMillisecondsSinceEpoch(1730702520000);
+  DateTime? _startTime = DateTime.fromMillisecondsSinceEpoch(1731045600000);
   DateTime? get startTime => _startTime;
   set startTime(DateTime? value) {
     _startTime = value;
@@ -162,6 +175,41 @@ class FFAppState extends ChangeNotifier {
 
   void deleteStartTime() {
     secureStorage.delete(key: 'ff_startTime');
+  }
+
+  bool _isTimerPaused = false;
+  bool get isTimerPaused => _isTimerPaused;
+  set isTimerPaused(bool value) {
+    _isTimerPaused = value;
+    secureStorage.setBool('ff_isTimerPaused', value);
+  }
+
+  void deleteIsTimerPaused() {
+    secureStorage.delete(key: 'ff_isTimerPaused');
+  }
+
+  int _timespan = 0;
+  int get timespan => _timespan;
+  set timespan(int value) {
+    _timespan = value;
+    secureStorage.setInt('ff_timespan', value);
+  }
+
+  void deleteTimespan() {
+    secureStorage.delete(key: 'ff_timespan');
+  }
+
+  DateTime? _stopTime = DateTime.fromMillisecondsSinceEpoch(1731045600000);
+  DateTime? get stopTime => _stopTime;
+  set stopTime(DateTime? value) {
+    _stopTime = value;
+    value != null
+        ? secureStorage.setInt('ff_stopTime', value.millisecondsSinceEpoch)
+        : secureStorage.remove('ff_stopTime');
+  }
+
+  void deleteStopTime() {
+    secureStorage.delete(key: 'ff_stopTime');
   }
 }
 

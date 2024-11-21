@@ -10,6 +10,10 @@ class StopPageModel extends FlutterFlowModel<StopPageWidget> {
 
   int timespan = 0;
 
+  int? hours;
+
+  int? mins;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for TextField widget.

@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'index_page_model.dart';
@@ -103,12 +104,14 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                           labelStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Inter',
+                                    fontSize: 24.0,
                                     letterSpacing: 0.0,
                                   ),
                           hintText: 'ID',
                           hintStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Inter',
+                                    fontSize: 24.0,
                                     letterSpacing: 0.0,
                                   ),
                           enabledBorder: OutlineInputBorder(
@@ -147,6 +150,7 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Inter',
+                              fontSize: 24.0,
                               letterSpacing: 0.0,
                             ),
                         textAlign: TextAlign.center,
@@ -173,19 +177,21 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                           },
                         ),
                         autofocus: false,
-                        textInputAction: TextInputAction.send,
+                        textInputAction: TextInputAction.next,
                         obscureText: !_model.passwordVisibility,
                         decoration: InputDecoration(
                           isDense: true,
                           labelStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Inter',
+                                    fontSize: 24.0,
                                     letterSpacing: 0.0,
                                   ),
                           hintText: 'Password',
                           hintStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Inter',
+                                    fontSize: 24.0,
                                     letterSpacing: 0.0,
                                   ),
                           enabledBorder: OutlineInputBorder(
@@ -222,7 +228,7 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                           fillColor:
                               FlutterFlowTheme.of(context).secondaryBackground,
                           contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                              50.0, 0.0, 0.0, 0.0),
+                              40.0, 20.0, 0.0, 10.0),
                           suffixIcon: InkWell(
                             onTap: () => safeSetState(
                               () => _model.passwordVisibility =
@@ -233,12 +239,13 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                               _model.passwordVisibility
                                   ? Icons.visibility_outlined
                                   : Icons.visibility_off_outlined,
-                              size: 0.0,
+                              size: 22,
                             ),
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Inter',
+                              fontSize: 24.0,
                               letterSpacing: 0.0,
                             ),
                         textAlign: TextAlign.center,
@@ -263,6 +270,7 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
                         color: const Color(0xFFFF5963),
+                        fontSize: 18.0,
                         letterSpacing: 0.0,
                       ),
                 ),
@@ -337,18 +345,53 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                       safeSetState(() {});
                     }
 
+                    final selectedMedia = await selectMedia(
+                      multiImage: false,
+                    );
+                    if (selectedMedia != null &&
+                        selectedMedia.every((m) =>
+                            validateFileFormat(m.storagePath, context))) {
+                      safeSetState(() => _model.isDataUploading = true);
+                      var selectedUploadedFiles = <FFUploadedFile>[];
+
+                      try {
+                        selectedUploadedFiles = selectedMedia
+                            .map((m) => FFUploadedFile(
+                                  name: m.storagePath.split('/').last,
+                                  bytes: m.bytes,
+                                  height: m.dimensions?.height,
+                                  width: m.dimensions?.width,
+                                  blurHash: m.blurHash,
+                                ))
+                            .toList();
+                      } finally {
+                        _model.isDataUploading = false;
+                      }
+                      if (selectedUploadedFiles.length ==
+                          selectedMedia.length) {
+                        safeSetState(() {
+                          _model.uploadedLocalFile =
+                              selectedUploadedFiles.first;
+                        });
+                      } else {
+                        safeSetState(() {});
+                        return;
+                      }
+                    }
+
                     safeSetState(() {});
                   },
                   text: 'LOGIN',
                   options: FFButtonOptions(
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 25.0, 16.0, 25.0),
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 30.0, 16.0, 30.0),
                     iconPadding:
                         const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: const Color(0xFFF06E43),
                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                           fontFamily: 'Inter Tight',
                           color: Colors.white,
+                          fontSize: 24.0,
                           letterSpacing: 0.0,
                         ),
                     elevation: 5.0,
@@ -357,7 +400,9 @@ class _IndexPageWidgetState extends State<IndexPageWidget> {
                   ),
                 ),
               ),
-            ].addToEnd(const SizedBox(height: 200.0)),
+            ]
+                .addToStart(const SizedBox(height: 50.0))
+                .addToEnd(const SizedBox(height: 200.0)),
           ),
         ),
       ),

@@ -168,7 +168,12 @@ class ScanCall {
 class StopCall {
   static Future<ApiCallResponse> call({
     String? token = '',
+    int? timespan,
   }) async {
+    final ffApiRequestBody = '''
+{
+  "timespan": "$timespan"
+}''';
     return ApiManager.instance.makeApiCall(
       callName: 'stop',
       apiUrl:
@@ -179,7 +184,102 @@ class StopCall {
         'Content-Type': 'application/json',
       },
       params: {},
-      bodyType: BodyType.NONE,
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  static String? status(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status''',
+      ));
+  static List<String>? tools(dynamic response) => (getJsonField(
+        response,
+        r'''$.tools''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+}
+
+class CommentCall {
+  static Future<ApiCallResponse> call({
+    String? token = '',
+    String? jobNumber = '',
+    String? comment = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "comment": "$comment",
+  "job-number": "$jobNumber"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'comment',
+      apiUrl:
+          'https://bwj-time-tracker-v1-437306.lm.r.appspot.com/mobile/comment/',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  static String? status(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status''',
+      ));
+  static List<String>? tools(dynamic response) => (getJsonField(
+        response,
+        r'''$.tools''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+}
+
+class CommentCopyCall {
+  static Future<ApiCallResponse> call({
+    String? token = '',
+    String? jobNumber = '',
+    String? comment = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "comment": "$comment",
+  "job-number": "$jobNumber"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'comment Copy',
+      apiUrl:
+          'https://bwj-time-tracker-v1-437306.lm.r.appspot.com/mobile/comment/',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,

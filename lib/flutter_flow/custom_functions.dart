@@ -9,8 +9,15 @@ import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
 
-int getTimespan(DateTime startTime) {
+int getTimespan(
+  DateTime stopTime,
+  int timespan,
+) {
   DateTime currentTime = DateTime.now();
-  Duration difference = currentTime.difference(startTime);
-  return difference.inMilliseconds;
+  Duration difference = currentTime.difference(stopTime);
+  return difference.inMilliseconds + timespan;
+}
+
+int getMins(int milsec) {
+  return milsec ~/ 60000;
 }
